@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:context="http://www.springframework.org/schema/context"   
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xsi:schemaLocation="  
+            http://www.springframework.org/schema/beans    
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd    
+            http://www.springframework.org/schema/aop    
+            http://www.springframework.org/schema/aop/spring-aop-3.2.xsd    
+            http://www.springframework.org/schema/tx    
+            http://www.springframework.org/schema/tx/spring-tx-3.2.xsd    
+            http://www.springframework.org/schema/context    
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd"> 
+                
+                <!-- DataSource -->  
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  
+        destroy-method="close">  
+        <property name="driverClass" value="com.mysql.jdbc.Driver" />  
+        <property name="jdbcUrl"   
+            value="jdbc:mysql://192.168.14.88:3306/tradeDB" />  
+        <property name="user" value="unitele" />  
+        <property name="password" value="123456" />  
+          <!-- 指定连接数据库连接池的最小连接数 -->    
+          <property name="minPoolSize"><value>10</value></property>
+            <!-- 指定连接数据库连接池的最大连接数 -->  
+		  <property name="maxPoolSize"><value>2000</value></property>
+		    <!-- 指定连接数据库连接池的连接的最大空闲时间 --> 
+		  <property name="maxIdleTime"><value>1800</value></property>
+		  <property name="acquireIncrement"><value>2</value></property>
+		  <property name="maxStatements"><value>0</value></property>
+		  <!-- 指定连接数据库连接池的初始化连接数 -->  
+		  <property name="initialPoolSize"><value>10</value></property>
+		  <property name="idleConnectionTestPeriod"><value>1800</value></property>
+		  <property name="acquireRetryAttempts"><value>30</value></property>
+		  <property name="breakAfterAcquireFailure"><value>true</value></property>
+		  <property name="testConnectionOnCheckout"><value>false</value></property>
+    </bean>  
+      <!-- SessionFactory 
+    <bean id="sessionFactory"  
+        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"  
+        p:dataSource-ref="dataSource"    
+        p:configLocation="/WEB-INF/conf/hibernate.cfg.xml" >  
+        <property name="mappingDirectoryLocations">    
+            <list>    
+                <value>    
+                    classpath*:/com/manage/*/bean/hbm 
+                </value>    
+            </list>    
+        </property>         
+    </bean> 
+ -->
+    
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">   
+	    <property name="dataSource" ref="dataSource"></property>
+	    <property name="hibernateProperties">  
+	       <props>
+	         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+	         <prop key="hibernate.show_sql">true</prop>
+	         <prop key="hibernate.format_sql">true</prop>
+	         <prop key="hibernate.hbm2ddl.auto">none</prop>
+            <prop key="hibernate.c3p0.min_size">25</prop> 
+            <prop key="hibernate.c3p0.max_size">2000</prop> 
+            <prop key="hibernate.c3p0.timeout">1800</prop> 
+            <prop key="hibernate.c3p0.max_statements">50</prop>  
+	       </props>
+		</property>  
+		
+		<property name="mappingLocations">     
+           <value>classpath:com/mnamp/**/bean/hbm/*.hbm.xml</value>     
+        </property>   
+	</bean>
+     <!-- TransactionManager -->  
+    <bean id="transactionManager"  
+        class="org.springframework.orm.hibernate4.HibernateTransactionManager"  
+        p:sessionFactory-ref="sessionFactory" />  
+        
+        <!-- Spring Advice -->  
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="modify*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="promiscuous*" propagation="REQUIRED" />
+            <tx:method name="downLoad*" propagation="REQUIRED" />
+            <tx:method name="get*" read-only="true"  propagation="REQUIRED" />
+            <tx:method name="find*" read-only="true"  propagation="REQUIRED" />
+            <tx:method name="query*" read-only="true"  propagation="REQUIRED" />
+            <tx:method name="select*" read-only="true"  propagation="REQUIRED" />
+        </tx:attributes>  
+    </tx:advice>  
+  
+    <!-- Spring Aop Config -->  
+    <aop:config>  
+        <aop:pointcut id="pointcut"  
+            expression="  
+                execution(* com.mnamp.*.service.impl.*Impl.*(..))" />  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut" />  
+    </aop:config> 
+    <!-- 全局公共DAO -->
+   <bean id="baseDao" class="com.mnamp.common.dao.impl.BaseDaoImpl">  
+        <property name="sessionFactory">  
+            <ref bean="sessionFactory" />  
+        </property>  
+    </bean> 
+                  
+	</beans>

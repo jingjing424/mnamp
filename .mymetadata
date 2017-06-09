@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="mnamp"
+  id="myeclipse.1487037401527"
+  context-root="/mnamp"
+  j2ee-spec="5.0"
+  archive="mnamp.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

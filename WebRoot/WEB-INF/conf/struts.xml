@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+ 
+   <!-- 修改Struts配置文件自动加载	-->
+   <constant name="struts.devMode" value="false" />
+   <constant name="struts.configuration.xml.reload" value="true" />
+   <!-- 动态方法调用，例如：Action!Method.action -->
+   <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	
+	<!-- 待定
+	
+	<constant name="struts.objectFactory" value="org.apache.struts2.spring.StrutsSpringObjectFactory" />-->
+
+
+
+
+   <include file="../conf/struts-include.xml" />
+ 
+</struts>    

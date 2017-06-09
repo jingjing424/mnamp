@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <webResource name="login.jsp" path="/login.jsp" location="0,0" size="0,0" />
+  <webResource name="home.jsp" path="/home.jsp" location="0,0" size="0,0" />
+  <webResource name="index.jsp" path="/index.jsp" location="0,0" size="0,0" />
+  <webResource name="finance.jsp" path="/page/finance/finance.jsp" location="0,0" size="0,0" />
+  <include file="../conf/struts-include.xml" location="0,0" size="0,0" />
+</Struts2Diagram>
+
